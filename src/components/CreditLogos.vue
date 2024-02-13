@@ -23,7 +23,6 @@ import { defineComponent, } from "vue";
 
 export default defineComponent({
 
-
   props: {
     visible: {
       type: Boolean,
@@ -31,26 +30,38 @@ export default defineComponent({
     },
   },
 
-  data() {
-    return {    };
-  },
-
-  created() {
-    return;
-  },
-
-  methods: {
-    
-  },
-
   computed: { 
-
     isMobile() {
       return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
     },
   },
 
-  watch: {
-  }
 });
 </script>
+
+<style lang="less">
+#icons-container {
+  color: #ddd;
+  display: flex;
+  justify-self: flex-end;
+  align-self: flex-end;
+  justify-content: center;
+  align-items: center;
+
+  & p {
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+  }
+
+  & a {
+    text-decoration: none; 
+    color: #fff;
+    pointer-events: auto; 
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+</style>
