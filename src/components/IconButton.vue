@@ -12,7 +12,7 @@
       <div
         v-bind="props"
         :id="buttonID"
-        :class="['icon-wrapper', {'active': modelValue}]"
+        :class="['icon-wrapper', {'active': model}]"
         @click="handleAction"
         @keyup.enter="handleAction"
         @touchstart="handleTouchStart"
@@ -52,7 +52,6 @@ type FontAwesomeIconProps = InstanceType<typeof FontAwesomeIcon>["$props"];
 type SizeType = Extract<FontAwesomeIconProps, 'size'>;
 
 interface IconButtonProps {
-  modelValue?: boolean;
   faIcon?: string;
   mdIcon?: string;
   color?: string;
@@ -90,6 +89,8 @@ const props = withDefaults(defineProps<IconButtonProps>(), {
   mdSize: "1.25em"
 });
 
+const model = defineModel<boolean>({ default: false });
+
 const emit = defineEmits<{
   "update:modelValue": [active: boolean],
   "activate": [activate?: null]
@@ -118,12 +119,9 @@ const buttonID = computed(() => {
   return id ? `${id}-button`: null;
 });
 
-function updateValue() {
-  emit("update:modelValue", !props.modelValue);
-}
 
 function handleAction() {
-  updateValue();
+  model.value = !model.value;
   emit('activate');
 }
 

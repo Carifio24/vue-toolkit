@@ -46,7 +46,6 @@ const defaultMapOptions: MapOptions = {
 export interface LocationSelectorProps {
   activatorColor?: string;
   detectLocation?: boolean;
-  modelValue?: LocationDeg;
   mapOptions?: MapOptions;
   initialPlace?: Place;
   places?: Place[];
@@ -63,7 +62,6 @@ export interface LocationSelectorProps {
 const props = withDefaults(defineProps<LocationSelectorProps>(), {
   activatorColor: "#ffffff",
   detectLocation: true,
-  modelValue: () => { return { latitudeDeg: 42.3814, longitudeDeg: -71.1281 }; }, // Harvard College Observatory
   mapOptions: () => defaultMapOptions,
   places: () => [],
   placeCircleOptions: () => {
@@ -92,11 +90,13 @@ const props = withDefaults(defineProps<LocationSelectorProps>(), {
 
 const emit = defineEmits<{
   mapReady: [ready?: null],
-  "update:modelValue": [value: LocationDeg],
   error: [msg: string],
   place: [place: Place],
 }>();
 
+const model = defineModel<LocationDeg>({
+  default: () => { return { latitudeDeg: 42.3814, longitudeDeg: -71.1281 }; }
+});
 const placeCircles = ref<L.CircleMarker[]>([]);
 const hoveredPlace = ref<Place | null>(null);
 const selectedCircle = ref<L.CircleMarker | null>(null);
@@ -108,18 +108,18 @@ const { geolocate } = useGeolocation();
 
 type CircleMaker = (latlng: L.LatLngExpression, options: L.CircleMarkerOptions) => L.CircleMarker;
 const circleMaker = computed<CircleMaker>(() => props.worldRadii ? L.circle : L.circleMarker);
-const latLng = computed<L.LatLngExpression>(() => locationToLatLng(props.modelValue));
-
-watch(props.modelValue, () => {
-  updateCircle();
-  if (map.value && !map.value.getBounds().contains(latLng.value)) {
-    map.value.setView(latLng.value);
-  }
-});
+const latLng = computed<L.LatLngExpression>(() => locationToLatLng(model.value));
 
 watch(props.places, () => {
   map.value?.remove();
   setup();
+});
+
+watch(latLng, (coords) => {
+  updateCircle();
+  if (map.value && !map.value.getBounds().contains(coords)) {
+    map.value.setView(coords);
+  } 
 });
 
 watch(selectedPlace, (newPlace) => {
@@ -145,10 +145,10 @@ onMounted(() => {
 function getLocation(startup=false) {
   geolocate()
     .then((position) => {
-      updateValue({
+      model.value = {
         longitudeDeg: position.coords.longitude,
         latitudeDeg: position.coords.latitude,
-      });
+      };
       map.value?.setView([position.coords.latitude, position.coords.longitude], map.value?.getZoom());
     })
     .catch((_error) => {
@@ -175,7 +175,7 @@ function circleForSelection(): L.CircleMarker | null {
   if (selectedPlace.value) {
     return null;
   }
-  return circleForLocation(props.modelValue, { ...props.selectedCircleOptions, interactive: false });
+  return circleForLocation(model.value, { ...props.selectedCircleOptions, interactive: false });
 }
 
 function circleForPlace(place: Place): L.CircleMarker {
@@ -188,10 +188,10 @@ function circleForPlace(place: Place): L.CircleMarker {
 }
 
 function onPlaceSelect(place: Place) {
-  updateValue({
+  model.value = { 
     longitudeDeg: place.longitudeDeg,
     latitudeDeg: place.latitudeDeg,
-  });
+  };
   emit("place", place);
   selectedPlace.value = place;
 }
@@ -201,10 +201,10 @@ function onMapSelect(event: LeafletMouseEvent) {
   longitudeDeg = ((longitudeDeg % 360) + 360) % 360;  // We want modulo, but JS % operator is remainder
   longitudeDeg -= 180;
   selectedPlace.value = null;
-  updateValue({
+  model.value = {
     latitudeDeg: event.latlng.lat,
     longitudeDeg,
-  });
+  };
 }
 
 function setup(initial=false) {
@@ -280,10 +280,6 @@ function setup(initial=false) {
 
   map.value = leafletMap;
   emit("mapReady");
-}
-
-function updateValue(location: LocationDeg) {
-  emit("update:modelValue", location);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
