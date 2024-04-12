@@ -5,9 +5,11 @@
 <script setup lang="ts">
 import { useGeolocation } from "../geolocation";
 import L, { LeafletMouseEvent, Map, TileLayerOptions } from "leaflet";
-import "leaflet/dist/leaflet.css";
-import { notify } from "@kyvg/vue3-notification";
+// import "leaflet/dist/leaflet.css";
+import { useNotification } from "@kyvg/vue3-notification";
 import { ref, computed, watch, onMounted } from "vue";
+
+const { notify } = useNotification();
 
 export interface LocationDeg {
   longitudeDeg: number;
@@ -62,7 +64,16 @@ export interface LocationSelectorProps {
 const props = withDefaults(defineProps<LocationSelectorProps>(), {
   activatorColor: "#ffffff",
   detectLocation: true,
-  mapOptions: () => defaultMapOptions,
+  mapOptions: () => {
+    return {
+      templateUrl: 'https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',
+      minZoom: 1,
+      maxZoom: 20,
+      subdomains:['mt0','mt1','mt2','mt3'],
+      attribution: `&copy <a href="https://www.google.com/maps">Google Maps</a>`,
+      className: 'map-tiles'
+    };
+  },
   places: () => [],
   placeCircleOptions: () => {
     return {
@@ -88,15 +99,15 @@ const props = withDefaults(defineProps<LocationSelectorProps>(), {
   layers: () => [],
 });
 
-const emit = defineEmits<{
-  mapReady: [ready?: null],
-  error: [msg: string],
-  place: [place: Place],
-}>();
+// const emit = defineEmits<{
+//   mapReady: [ready?: null],
+//   error: [msg: string],
+//   place: [place: Place],
+// }>();
 
-const model = defineModel<LocationDeg>({
-  default: () => { return { latitudeDeg: 42.3814, longitudeDeg: -71.1281 }; }
-});
+// const model = defineModel<LocationDeg>({
+//   default: () => { return { latitudeDeg: 42.3814, longitudeDeg: -71.1281 }; }
+// });
 const placeCircles = ref<L.CircleMarker[]>([]);
 const hoveredPlace = ref<Place | null>(null);
 const selectedCircle = ref<L.CircleMarker | null>(null);
@@ -106,31 +117,31 @@ const map = ref<Map | null>(null);
 
 const { geolocate } = useGeolocation();
 
-type CircleMaker = (latlng: L.LatLngExpression, options: L.CircleMarkerOptions) => L.CircleMarker;
-const circleMaker = computed<CircleMaker>(() => props.worldRadii ? L.circle : L.circleMarker);
-const latLng = computed<L.LatLngExpression>(() => locationToLatLng(model.value));
+// type CircleMaker = (latlng: L.LatLngExpression, options: L.CircleMarkerOptions) => L.CircleMarker;
+// const circleMaker = computed<CircleMaker>(() => props.worldRadii ? L.circle : L.circleMarker);
+// const latLng = computed<L.LatLngExpression>(() => locationToLatLng(model.value));
 
-watch(props.places, () => {
-  map.value?.remove();
-  setup();
-});
-
-watch(latLng, (coords) => {
-  updateCircle();
-  if (map.value && !map.value.getBounds().contains(coords)) {
-    map.value.setView(coords);
-  } 
-});
-
-watch(selectedPlace, (newPlace) => {
-  const oldSelectedCircle = selectedPlaceCircle.value;
-  oldSelectedCircle?.setStyle(props.placeCircleOptions);
-  if (newPlace) {
-    const index = props.places.indexOf(newPlace);
-    selectedPlaceCircle.value = placeCircles.value[index];
-    selectedPlaceCircle.value?.setStyle(props.selectedCircleOptions);
-  }
-});
+// watch(props.places, () => {
+//   map.value?.remove();
+//   setup();
+// });
+// 
+// watch(latLng, (coords) => {
+//   updateCircle();
+//   if (map.value && !map.value.getBounds().contains(coords)) {
+//     map.value.setView(coords);
+//   } 
+// });
+// 
+// watch(selectedPlace, (newPlace) => {
+//   const oldSelectedCircle = selectedPlaceCircle.value;
+//   oldSelectedCircle?.setStyle(props.placeCircleOptions);
+//   if (newPlace) {
+//     const index = props.places.indexOf(newPlace);
+//     selectedPlaceCircle.value = placeCircles.value[index];
+//     selectedPlaceCircle.value?.setStyle(props.selectedCircleOptions);
+//   }
+// });
 
 onMounted(() => {
   if (props.initialPlace) {
@@ -139,7 +150,7 @@ onMounted(() => {
   if (props.detectLocation) {
     getLocation(true); 
   }
-  setup(true);
+  // setup(true);
 });
 
 function getLocation(startup=false) {
@@ -161,38 +172,38 @@ function getLocation(startup=false) {
           duration: 4500
         });
       } else {
-        emit("error", msg);
+        // emit("error", msg);
       }
     });
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function circleForLocation(location: LocationDeg, circleOptions: Record<string, any>): L.CircleMarker {
-  return circleMaker.value([location.latitudeDeg, location.longitudeDeg], circleOptions); 
-}
+// // eslint-disable-next-line @typescript-eslint/no-explicit-any
+// function circleForLocation(location: LocationDeg, circleOptions: Record<string, any>): L.CircleMarker {
+//   return circleMaker.value([location.latitudeDeg, location.longitudeDeg], circleOptions); 
+// }
 
-function circleForSelection(): L.CircleMarker | null {
-  if (selectedPlace.value) {
-    return null;
-  }
-  return circleForLocation(model.value, { ...props.selectedCircleOptions, interactive: false });
-}
-
-function circleForPlace(place: Place): L.CircleMarker {
-  const options = (place === selectedPlace.value) ? props.selectedCircleOptions : props.placeCircleOptions;
-  const circle = circleForLocation(place, options);
-  if (place.name) {
-    circle.bindTooltip(place.name);
-  }
-  return circle;
-}
+// function circleForSelection(): L.CircleMarker | null {
+//   if (selectedPlace.value) {
+//     return null;
+//   }
+//   return circleForLocation(model.value, { ...props.selectedCircleOptions, interactive: false });
+// }
+// 
+// function circleForPlace(place: Place): L.CircleMarker {
+//   const options = (place === selectedPlace.value) ? props.selectedCircleOptions : props.placeCircleOptions;
+//   const circle = circleForLocation(place, options);
+//   if (place.name) {
+//     circle.bindTooltip(place.name);
+//   }
+//   return circle;
+// }
 
 function onPlaceSelect(place: Place) {
   model.value = { 
     longitudeDeg: place.longitudeDeg,
     latitudeDeg: place.latitudeDeg,
   };
-  emit("place", place);
+  // emit("place", place);
   selectedPlace.value = place;
 }
 
@@ -207,107 +218,107 @@ function onMapSelect(event: LeafletMouseEvent) {
   };
 }
 
-function setup(initial=false) {
-  const mapContainer = document.querySelector(".map-container") as HTMLDivElement;
-  const location: L.LatLngExpression = initial && props.mapOptions.initialLocation ?
-    locationToLatLng(props.mapOptions.initialLocation) :
-    latLng.value;
+// function setup(initial=false) {
+//   const mapContainer = document.querySelector(".map-container") as HTMLDivElement;
+//   const location: L.LatLngExpression = initial && props.mapOptions.initialLocation ?
+//     locationToLatLng(props.mapOptions.initialLocation) :
+//     latLng.value;
+// 
+//   const initialZoom = props.mapOptions.initialZoom ?? 4;
+//   const zoom = initial ? initialZoom : (map.value?.getZoom() ?? initialZoom);
+//   const leafletMap = L.map(mapContainer).setView(location, zoom);
+// 
+//   const options = { ...defaultMapOptions, ...props.mapOptions };
+//   L.tileLayer(options.templateUrl, options).addTo(leafletMap);
+// 
+//   placeCircles.value = props.places.map(place => circleForPlace(place));
+//   placeCircles.value.forEach((circle, index) => {
+//     circle.on("mouseover", () => {
+//       const place = props.places[index];
+//       hoveredPlace.value = place;
+//       circle.openTooltip([place.latitudeDeg, place.longitudeDeg]);
+//     });
+// 
+//     if (props.placeSelectable) {
+//       circle.on("click", () => {
+//         onPlaceSelect(props.places[index]);
+//       });
+//     }
+// 
+//     circle.on("mouseout", () => {
+//       hoveredPlace.value = null;
+//     });
+// 
+//     circle.addTo(leafletMap);
+//   });
+// 
+//   selectedCircle.value = circleForSelection();
+//   selectedCircle.value?.addTo(leafletMap);
+// 
+//   leafletMap.doubleClickZoom.disable();
+//   if (props.selectable) {
+//     leafletMap.on(props.selectionEvent, onMapSelect);
+//   }
+//   leafletMap.attributionControl.setPrefix('<a href="https://leafletjs.com" title="A JavaScript library for interactive maps" target="_blank" rel="noopener noreferrer" >Leaflet</a>');
+// 
+//   props.layers.forEach(layer => layer.addTo(leafletMap));
+//   props.geoJsonFiles.forEach((record) => {
+//     const { url, geojson, style } = record;
+//     if (url) {
+//       fetch(url)
+//         .then(response => response.json())
+//         .then(data => L.geoJSON(data, { style }).addTo(leafletMap))
+//         .catch(error => console.error(`GeoJSON fetching error: ${error}`));
+//     } else if (geojson) {
+//       L.geoJSON(geojson, {
+//         style,
+//         pointToLayer: function (feature, latlng) {
+//           if (feature.properties.absoluteRadius) {
+//             style.radius = feature.properties.absoluteRadius;
+//             return L.circle(latlng, style);
+//           } else {
+//             return L.circleMarker(latlng, style);
+//           }
+//         },
+//         onEachFeature: function(feature, layer) {
+//           if (feature.properties?.popupContent) {
+//             layer.bindPopup(feature.properties.popupContent);
+//           }
+//         }
+//       }).addTo(leafletMap);
+//     }
+//   });
+//
+//   map.value = leafletMap;
+//   emit("mapReady");
+// }
 
-  const initialZoom = props.mapOptions.initialZoom ?? 4;
-  const zoom = initial ? initialZoom : (map.value?.getZoom() ?? initialZoom);
-  const leafletMap = L.map(mapContainer).setView(location, zoom);
+// // eslint-disable-next-line @typescript-eslint/no-unused-vars
+// function addLayerToMap(layer: L.Layer) {
+//   const leafletMap = map.value;
+//   if (leafletMap) {
+//     layer.addTo(leafletMap as Map);
+//   }
+// }
+// 
+// // eslint-disable-next-line @typescript-eslint/no-unused-vars
+// function removeLayerFromMap(layer: L.Layer) {
+//   const leafletMap = map.value;
+//   if (leafletMap) {
+//     layer.removeFrom(leafletMap as Map);
+//   }
+// }
 
-  const options = { ...defaultMapOptions, ...props.mapOptions };
-  L.tileLayer(options.templateUrl, options).addTo(leafletMap);
-
-  placeCircles.value = props.places.map(place => circleForPlace(place));
-  placeCircles.value.forEach((circle, index) => {
-    circle.on("mouseover", () => {
-      const place = props.places[index];
-      hoveredPlace.value = place;
-      circle.openTooltip([place.latitudeDeg, place.longitudeDeg]);
-    });
-
-    if (props.placeSelectable) {
-      circle.on("click", () => {
-        onPlaceSelect(props.places[index]);
-      });
-    }
-
-    circle.on("mouseout", () => {
-      hoveredPlace.value = null;
-    });
-
-    circle.addTo(leafletMap);
-  });
-
-  selectedCircle.value = circleForSelection();
-  selectedCircle.value?.addTo(leafletMap);
-
-  leafletMap.doubleClickZoom.disable();
-  if (props.selectable) {
-    leafletMap.on(props.selectionEvent, onMapSelect);
-  }
-  leafletMap.attributionControl.setPrefix('<a href="https://leafletjs.com" title="A JavaScript library for interactive maps" target="_blank" rel="noopener noreferrer" >Leaflet</a>');
-
-  props.layers.forEach(layer => layer.addTo(leafletMap));
-  props.geoJsonFiles.forEach((record) => {
-    const { url, geojson, style } = record;
-    if (url) {
-      fetch(url)
-        .then(response => response.json())
-        .then(data => L.geoJSON(data, { style }).addTo(leafletMap))
-        .catch(error => console.error(`GeoJSON fetching error: ${error}`));
-    } else if (geojson) {
-      L.geoJSON(geojson, {
-        style,
-        pointToLayer: function (feature, latlng) {
-          if (feature.properties.absoluteRadius) {
-            style.radius = feature.properties.absoluteRadius;
-            return L.circle(latlng, style);
-          } else {
-            return L.circleMarker(latlng, style);
-          }
-        },
-        onEachFeature: function(feature, layer) {
-          if (feature.properties?.popupContent) {
-            layer.bindPopup(feature.properties.popupContent);
-          }
-        }
-      }).addTo(leafletMap);
-    }
-  });
-
-  map.value = leafletMap;
-  emit("mapReady");
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function addLayerToMap(layer: L.Layer) {
-  const leafletMap = map.value;
-  if (leafletMap) {
-    layer.addTo(leafletMap as Map);
-  }
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function removeLayerFromMap(layer: L.Layer) {
-  const leafletMap = map.value;
-  if (leafletMap) {
-    layer.removeFrom(leafletMap as Map);
-  }
-}
-
-function updateCircle() {
-  if (!map.value) { return; }
-  selectedCircle.value?.remove();
-  selectedCircle.value = circleForSelection();
-  if (selectedCircle.value) {
-    selectedCircle.value.addTo(map.value as Map);
-  }
-}
-
-function locationToLatLng(location: LocationDeg): L.LatLngExpression {
-  return [location.latitudeDeg, location.longitudeDeg];
-}
+// function updateCircle() {
+//   if (!map.value) { return; }
+//   selectedCircle.value?.remove();
+//   selectedCircle.value = circleForSelection();
+//   if (selectedCircle.value) {
+//     selectedCircle.value.addTo(map.value as Map);
+//   }
+// }
+// 
+// function locationToLatLng(location: LocationDeg): L.LatLngExpression {
+//   return [location.latitudeDeg, location.longitudeDeg];
+// }
 </script>

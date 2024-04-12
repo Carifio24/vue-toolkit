@@ -38,6 +38,9 @@ const cssVars = computed(() => {
 </script>
 
 <style scoped>
+#logo-credits {
+  background-color: red;
+}
 #logo-credits img {
   height: var(--logo-size);
 }
