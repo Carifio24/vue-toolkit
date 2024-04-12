@@ -47,7 +47,7 @@ export class KeyboardControlSettings {
     moveUp = [new KeyPressInfo("KeyW")],
     moveLeft = [new KeyPressInfo("KeyA")],
     moveDown = [new KeyPressInfo("KeyS")],
-    moveRight =[new KeyPressInfo("KeyD")],
+    moveRight = [new KeyPressInfo("KeyD")],
     moveAmount = 20
   }) {
     this.zoomIn = zoomIn;
@@ -68,12 +68,12 @@ export class KeyboardControlSettings {
     "moveLeft",
     "moveRight",
   ] as const;
-  
+
   makeListener(
     actionName: KeyboardControlSettings["actionTypes"][number],
     action: () => void
-  ): (element: HTMLElement, event: KeyboardEvent) => void {
-    return (_element, event) => {
+  ): (event: KeyboardEvent) => void {
+    return (event) => {
       for (const keyPress of this[actionName]) {
         if (keyPress.matches(event)) {
           action();
