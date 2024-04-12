@@ -20,18 +20,20 @@
     "@types/leaflet": "^1.9.3",
     "@typescript-eslint/eslint-plugin": "^6.19.0",
     "@typescript-eslint/parser": "^6.19.0",
-    "@vue/cli-plugin-eslint": "^5.0.8",
-    "@vue/cli-plugin-typescript": "^5.0.8",
-    "@vue/cli-service": "^5.0.8",
+    "@vitejs/plugin-vue": "^5.0.4",
     "@vue/eslint-config-typescript": "^12.0.0",
     "copy-webpack-plugin": "^12.0.2",
     "eslint": "^8.31.0",
     "eslint-plugin-vue": "^9.24.1",
     "less": "^4.2.0",
     "less-loader": "^12.1.0",
+    "npm-run-all2": "^6.1.2",
     "typescript": "^4.9.4",
+    "vite": "^5.2.8",
+    "vite-plugin-nightwatch": "^0.4.6",
+    "vite-plugin-vue-devtools": "^7.0.27",
     "vue-template-compiler": "^2.7.14",
-    "webpack": "^5.75.0"
+    "vue-tsc": "^2.0.13"
   },
   "files": [
     "dist/*",
@@ -39,14 +41,16 @@
   ],
   "main": "./dist/index.common.js",
   "module": "dist/",
-  "packageManager": "yarn@3.3.0",
   "publicConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "vue-cli-service build --target lib --name index src/index.ts",
+    "build": "run-p type-check \"build-only {@}\" --",
+    "build-only": "vite build",
     "clean": "rimraf dist",
-    "lint": "vue-cli-service lint src --no-fix"
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "type-check": "vue-tsc --build --force"
   },
+  "type": "module",
   "types": "./dist/src/index.d.ts"
 }
