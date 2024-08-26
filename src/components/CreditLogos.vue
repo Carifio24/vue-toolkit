@@ -49,6 +49,7 @@ const props = withDefaults(defineProps<CreditLogosProps>(), {
   logoSize: "5vmin",
   extraLogos: () => [],
   defaultLogos: () => ["cosmicds", "wwt", "sciact", "nasa"],
+  backgroundColor: "transparent",
 });
 
 const logos = computed<CreditLogo[]>(() => {
@@ -59,6 +60,7 @@ const logos = computed<CreditLogo[]>(() => {
 const cssVars = computed(() => {
   return {
     "--logo-size": props.logoSize,
+    "--background-color": props.backgroundColor,
   };
 });
 </script>
@@ -66,6 +68,7 @@ const cssVars = computed(() => {
 <style lang="less">
 #icons-container {
   pointer-events: auto;
+  background: var(--background-color);
 
   img {
     height: var(--logo-size);
