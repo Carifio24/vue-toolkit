@@ -5,6 +5,8 @@ import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 
+import Notifications from "@kyvg/vue3-notification";
+
 const vuetify = createVuetify({
   components,
   directives
@@ -13,6 +15,7 @@ const vuetify = createVuetify({
 setup((app) => {
   app.use(wwtPinia);
   app.use(vuetify);
+  app.use(Notifications);
 });
 
 const preview: Preview = {

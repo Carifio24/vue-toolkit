@@ -18,9 +18,13 @@
 </template>
 
 <script setup lang="ts">
+/** Autodocs testing */
+defineOptions();
+
 import { computed } from "vue";
 
 import { CreditLogo, CreditLogosProps, DefaultCreditLogo } from "../types";
+
 
 const DEFAULT_LOGOS: Map<DefaultCreditLogo, CreditLogo> = new Map([
   ["cosmicds", {
