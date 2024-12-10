@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { CircleMarkerOptions, TileLayerOptions } from "leaflet";
 import { engineStore } from "@wwtelescope/engine-pinia";
+import { MapBoxFeatureCollection } from "./mapbox";
 
 /** The type of the WWT engine Pinia store */
 export type WWTEngineStore = ReturnType<typeof engineStore>;
@@ -236,6 +237,25 @@ export interface LocationSelectorProps {
   geoJsonFiles?: GeoJSONProp[];
   /** Layers to show on the map. The list is empty by default */
   layers?: L.Layer[];
+}
+
+
+/** Interface describing props for the location search */
+export interface LocationSearchProps {
+  searchProvider?: (searchText: string) => Promise<MapBoxFeatureCollection | null>;
+  /** Whether or not the location search is currently open */
+  modelValue: boolean;
+  /** Whether the search box should stay open when not in use */
+  stayOpen: boolean;
+  /** The accent color for the location search */
+  accentColor: string;
+  /** If true, the location search will be more compact in size */
+  compact: boolean;
+  /** The theme to use for the location search */ 
+  theme: string;
+  buttonSize: string;
+  bgColor: string;
+  persistSelected: boolean;
 }
 
 /* WWT HUD */
