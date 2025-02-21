@@ -38,7 +38,7 @@ import { computed } from "vue";
 import { Settings } from "@wwtelescope/engine";
 import { storeToRefs } from "pinia";
 
-import { WwtHUDProps } from "../types";
+import { WwtHUDProps, WWTEngineStore } from "../types";
 
 
 const R2D = 180 / Math.PI;
@@ -73,7 +73,7 @@ const {
   foregroundOpacity,
   backgroundImageset,
   foregroundImageset,
-} = storeToRefs(props.store);
+} = storeToRefs<WWTEngineStore>(props.store);
 
 const cssVars = computed(() => {
   return {

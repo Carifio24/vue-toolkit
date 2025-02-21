@@ -273,7 +273,7 @@ export interface WwtHUDProps {
 /** Interface describing props for the speed control component */
 export interface SpeedControlProps {
   /** The WWT engine store to use for the HUD. Required */
-  store: ReturnType<typeof engineStore>;
+  store: WWTEngineStore;
   /** The primary color used for the component. Should be a valid CSS color */
   color?: string;
   /** The maximum allowed WWT speed */
