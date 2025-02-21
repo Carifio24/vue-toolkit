@@ -2,7 +2,7 @@ import { ref, onMounted } from "vue";
 import { Capacitor, PermissionState as CapacitorPermissionState } from '@capacitor/core';
 import { Geolocation, PermissionStatus as CapacitorPermissionStatus, Position, PositionOptions } from "@capacitor/geolocation";
 
-import { PositionCoords } from "../types";
+export type PositionCoords = Position['coords'];
 
 /**
   * Determine which of two capacitor permission states is 'better'.

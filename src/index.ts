@@ -1,9 +1,10 @@
 import { BackgroundImageset, skyBackgroundImagesets } from "./background";
-import { useFullscreen, useWindowShape, WindowShape } from "./composables";
 import { KeyPressInfo, KeyboardControlSettings } from "./keyboard";
-import { useWWTKeyboardControls } from "./wwt-utils";
 
-import { useGeolocation } from "./composables/geolocation";
+import { useFullscreen } from "./composables/fullscreen";
+import { PositionCoords, useGeolocation } from "./composables/geolocation";
+import { WindowShape, useWindowShape } from "./composables/windowShape";
+import { useWWTKeyboardControls } from "./composables/wwtKeyboard";
 
 import IconButton from "./components/IconButton.vue";
 import LocationSelector from "./components/LocationSelector.vue";
@@ -24,6 +25,7 @@ export {
   skyBackgroundImagesets,
   useFullscreen,
   useWindowShape,
+  PositionCoords,
   WindowShape,
   FundingAcknowledgement,
   CreditLogos,

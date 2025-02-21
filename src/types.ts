@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { CircleMarkerOptions, TileLayerOptions } from "leaflet";
 import { engineStore } from "@wwtelescope/engine-pinia";
-import { Position } from "@capacitor/geolocation";
 
 /** The type of the WWT engine Pinia store */
 export type WWTEngineStore = ReturnType<typeof engineStore>;
@@ -289,4 +288,28 @@ export interface SpeedControlProps {
   rateDelta?: number;
 }
 
-export type PositionCoords = Position['coords'];
+/** Interface describing props for the playback control component */
+export interface PlaybackControlProps {
+  /** The WWT playback rate */
+  modelValue?: number;
+  /** The maximum power used for the symmetrical log */
+  maxPower?: number;
+  /** Whether to have the playback paused */
+  paused?: boolean;
+  /** The maximum speed */
+  max?: number | null;
+  /** The minimum speed */
+  min?: number | null;
+  /** The component color. Should be a valid CSS color */
+  color?: string;
+  /** Whether to use a more compact layout (intended for smaller screen) */
+  small?: boolean;
+  /** Whether to display the component inline */
+  inline?: boolean;
+  /** Whether to display buttons when component is inline */
+  inlineButton?: boolean;
+  /** Whether to show the close button */
+  showCloseButton?: boolean;
+  /** Whether to hide the play button */
+  hidePlayButton?: boolean;
+}
