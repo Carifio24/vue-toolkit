@@ -1,8 +1,9 @@
 import { BackgroundImageset, skyBackgroundImagesets } from "./background";
 import { useFullscreen, useWindowShape, WindowShape } from "./composables";
-import { PositionCoords, useGeolocation } from "./geolocation";
 import { KeyPressInfo, KeyboardControlSettings } from "./keyboard";
 import { useWWTKeyboardControls } from "./wwt-utils";
+
+import { useGeolocation } from "./composables/geolocation";
 
 import IconButton from "./components/IconButton.vue";
 import LocationSelector from "./components/LocationSelector.vue";
@@ -28,7 +29,6 @@ export {
   CreditLogos,
   GeolocationButton,
   WwtHud,
-  PositionCoords,
   useGeolocation,
   useWWTKeyboardControls,
 };

@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { CircleMarkerOptions, TileLayerOptions } from "leaflet";
 import { engineStore } from "@wwtelescope/engine-pinia";
+import { Position } from "@capacitor/geolocation";
 
 /** The type of the WWT engine Pinia store */
 export type WWTEngineStore = ReturnType<typeof engineStore>;
@@ -269,3 +270,23 @@ export interface WwtHUDProps {
   /** The WWT engine store to use for the HUD. Required */
   store: ReturnType<typeof engineStore>;
 }
+
+/** Interface describing props for the speed control component */
+export interface SpeedControlProps {
+  /** The WWT engine store to use for the HUD. Required */
+  store: ReturnType<typeof engineStore>;
+  /** The primary color used for the component. Should be a valid CSS color */
+  color?: string;
+  /** The maximum allowed WWT speed */
+  maxSpeed?: number;
+  /** The default WWT playback rate */
+  defaultRate?: number;
+  /** Whether or not the speed control should be displayed inline */
+  useInline?: boolean; 
+  /** Whether or not to show the current playback status */
+  showStatus?: boolean;
+  /** The factor by which to adjust the WWT speed when speeding up or down */ 
+  rateDelta?: number;
+}
+
+export type PositionCoords = Position['coords'];
