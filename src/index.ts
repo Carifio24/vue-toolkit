@@ -13,26 +13,33 @@ import CreditLogos from "./components/CreditLogos.vue";
 import GeolocationButton from "./components/GeolocationButton.vue";
 import WwtHud from "./components/WwtHud.vue";
 import Gallery from "./components/Gallery.vue";
+import PlaybackControls from "./components/PlaybackControls.vue";
+import SpeedControls from "./components/SpeedControls.vue";
 
 
 export {
   BackgroundImageset,
   KeyPressInfo,
   KeyboardControlSettings,
-  Gallery,
-  IconButton,
-  LocationSelector,
-  skyBackgroundImagesets,
-  useFullscreen,
-  useWindowShape,
   PositionCoords,
   WindowShape,
-  FundingAcknowledgement,
-  CreditLogos,
-  GeolocationButton,
-  WwtHud,
+
+  skyBackgroundImagesets,
+
+  useFullscreen,
   useGeolocation,
+  useWindowShape,
   useWWTKeyboardControls,
+
+  CreditLogos,
+  FundingAcknowledgement,
+  Gallery,
+  GeolocationButton,
+  IconButton,
+  LocationSelector,
+  PlaybackControls,
+  SpeedControls,
+  WwtHud,
 };
 
 export * from "./mapbox";
