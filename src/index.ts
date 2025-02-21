@@ -13,8 +13,8 @@ import CreditLogos from "./components/CreditLogos.vue";
 import GeolocationButton from "./components/GeolocationButton.vue";
 import WwtHud from "./components/WwtHud.vue";
 import Gallery from "./components/Gallery.vue";
-import PlaybackControls from "./components/PlaybackControls.vue";
-import SpeedControls from "./components/SpeedControls.vue";
+import PlaybackControl from "./components/PlaybackControl.vue";
+import SpeedControl from "./components/SpeedControl.vue";
 
 
 export {
@@ -37,8 +37,8 @@ export {
   GeolocationButton,
   IconButton,
   LocationSelector,
-  PlaybackControls,
-  SpeedControls,
+  PlaybackControl,
+  SpeedControl,
   WwtHud,
 };
 
