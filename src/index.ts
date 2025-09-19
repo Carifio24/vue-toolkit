@@ -15,6 +15,7 @@ import GeolocationButton from "./components/GeolocationButton.vue";
 import IconButton from "./components/IconButton.vue";
 import LocationSearch from "./components/LocationSearch.vue";
 import LocationSelector from "./components/LocationSelector.vue";
+import PeekOut from "./components/PeekOut.vue";
 import PlaybackControl from "./components/PlaybackControl.vue";
 import ShareButton from "./components/ShareButton.vue";
 import SpeedControl from "./components/SpeedControl.vue";
@@ -45,6 +46,7 @@ export {
   IconButton,
   LocationSearch,
   LocationSelector,
+  PeekOut,
   PlaybackControl,
   ShareButton,
   SpeedControl,
