@@ -12,21 +12,12 @@
             :rating="rating"
             name="item"
           >
-            <v-hover
-              :key="rating"
-            >
-              <template #default="{ isHovering, props }: { isHovering: boolean | null, props: Record<string, unknown> }">
-                <FontAwesomeIcon
-                  v-bind="props"
-                  :size="iconSize"
-                  :class="['rating', rating, {'hovered': isHovering}, {'selected': rating === currentRating}]"
-                  :icon="ratingIcons[rating as UserExperienceRating][0]"
-                  :color="(isHovering || rating === currentRating) ? ratingIcons[rating as UserExperienceRating][1]: baseColor"
-                  @click="currentRating = rating as UserExperienceRating"
-                >
-                </FontAwesomeIcon>
-              </template>
-            </v-hover>
+            <DefaultRatingItem
+              :rating="rating as UserExperienceRating"
+              :base-color="baseColor"
+              icon-size="3x"
+              @select="currentRating = rating as UserExperienceRating"
+            />
           </slot>
         </div>
       </v-window-item>
@@ -37,6 +28,13 @@
             :rating="rating"
             name="item"
           >
+            <DefaultRatingItem
+              :rating="rating as UserExperienceRating"
+              :base-color="baseColor"
+              :selected="currentRating === rating"
+              icon-size="3x"
+              @select="currentRating = rating as UserExperienceRating"
+            />
           </slot>
         </div>
         <VTextarea
@@ -46,9 +44,14 @@
           auto-grow
           max-rows="4"
           density="compact"
-          width="75%"
+          width="100%"
         >
         </VTextarea>
+        <v-btn
+          @click="emit('finish')"
+        >
+          Finish
+        </v-btn>
       </v-window-item>
     </v-window>
 
@@ -62,7 +65,6 @@ import { computed, ref, watch } from "vue";
 import { useTheme } from "vuetify";
 import type { UserExperienceProps } from "../types";
 import { DEFAULT_RATING_COLORS, type UserExperienceRating } from "../utils";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faFaceGrinStars,
@@ -73,6 +75,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import { VCard, VTextarea, VWindow } from "vuetify/components";
+import DefaultRatingItem from "./DefaultRatingItem.vue";
 
 const { current: currentTheme } = useTheme();
 
@@ -86,6 +89,7 @@ const props = withDefaults(defineProps<UserExperienceProps>(), {
 const emit = defineEmits<{
   (event: "comments", comments: string): void;
   (event: "rating", rating: UserExperienceRating): void;
+  (event: "finish"): void;
 }>();
 
 library.add(faFaceGrinStars);
@@ -139,6 +143,7 @@ watch(comments, (text: string | null) => {
   display: flex;
   flex-direction: row;
   gap: 10px;
+  padding: 10px;
 }
 
 .rating {
@@ -162,5 +167,9 @@ watch(comments, (text: string | null) => {
   &.error {
     background-color: #b30000;
   }
+}
+
+.comments-box {
+  margin: auto;
 }
 </style>
