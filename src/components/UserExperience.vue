@@ -1,14 +1,16 @@
 <template>
   <v-card class="rating-root">
     <v-card-title>{{ question }}</v-card-title>
-    <v-stepper
+    <v-window
       :items="['Rating', 'Comments']"
+      v-model="step"
     >
-      <v-stepper-item>
+      <v-window-item value="0">
         <div class="rating-icon-row">
           <slot
             v-for="rating in Object.keys(ratingIcons)"
             :rating="rating"
+            name="item"
           >
             <v-hover
               :key="rating"
@@ -27,12 +29,13 @@
             </v-hover>
           </slot>
         </div>
-      </v-stepper-item>
-      <v-stepper-item>
+      </v-window-item>
+      <v-window-item value="1">
         <div class="rating-icon-row">
           <slot
             v-for="rating in Object.keys(ratingIcons)"
             :rating="rating"
+            name="item"
           >
           </slot>
         </div>
@@ -46,15 +49,8 @@
           width="75%"
         >
         </VTextarea>
-        <v-btn
-          @click="handleRatingSubmission"
-          width="fit-content"
-          color="success"
-        >
-          Submit
-        </v-btn>
-      </v-stepper-item>
-    </v-stepper>
+      </v-window-item>
+    </v-window>
 
     <notifications group="rating-submission" position="center bottom" classes="rating-notification"/>
   </v-card>
@@ -62,10 +58,10 @@
 
 <script setup lang="ts">
 /* eslint-disable @typescript-eslint/naming-convention */
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useTheme } from "vuetify";
 import type { UserExperienceProps } from "../types";
-import { DEFAULT_RATING_COLORS, type UserExperienceRating, submitUserExperienceRating } from "../utils";
+import { DEFAULT_RATING_COLORS, type UserExperienceRating } from "../utils";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -76,7 +72,7 @@ import {
   faFaceFrown,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { VCard, VStepper, VTextarea } from "vuetify/components";
+import { VCard, VTextarea, VWindow } from "vuetify/components";
 
 const { current: currentTheme } = useTheme();
 
@@ -84,13 +80,12 @@ const props = withDefaults(defineProps<UserExperienceProps>(), {
   ratingColors: () => DEFAULT_RATING_COLORS,
   question: "How would you rate your experience?",
   commentPlaceholder: "Tell us any comments you have about this story",
-  submitter: submitUserExperienceRating,
   iconSize: "5x",
 });
 
 const emit = defineEmits<{
-  (event: "empty"): void;
-  (event: "submit", response: Response | null): void;
+  (event: "comments", comments: string): void;
+  (event: "rating", rating: UserExperienceRating): void;
 }>();
 
 library.add(faFaceGrinStars);
@@ -98,7 +93,6 @@ library.add(faFaceSmile);
 library.add(faFaceMeh);
 library.add(faFaceFrownOpen);
 library.add(faFaceFrown);
-
 
 const ratingIcons: Record<UserExperienceRating, [string, string]> = {
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -109,26 +103,27 @@ const ratingIcons: Record<UserExperienceRating, [string, string]> = {
   "excellent": ["fa-face-grin-stars", "green"],
 };
 
+const step = ref(0);
+
 const currentRating = ref<UserExperienceRating | null>(null);
 const baseColor = computed(() => props.baseColor ?? (currentTheme.value.dark ? 'white' : 'black'));
 const comments = ref<string | null>(null);
 
-async function handleRatingSubmission() {
-  if (!(currentRating.value || comments.value)) {
-    emit("empty");
-    return;
+watch(currentRating, (rating: UserExperienceRating | null) => {
+  if (rating) {
+    if (step.value === 0) {
+      step.value += 1;
+    }
+    emit("rating", rating);
   }
-  props.submitter({
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    story_name: props.story,
-    uuid: props.uuid,
-    comments: comments.value ?? undefined,
-    rating: currentRating.value ?? undefined,
-  }, props.apiKey)
-    .then((response: Response | null) => {
-      emit("submit", response);
-    });
-}
+});
+
+watch(comments, (text: string | null) => {
+  if (text) {
+    emit("comments", text);
+  }
+});
+
 </script>
 
 <style lang="less">
