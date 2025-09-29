@@ -12,7 +12,11 @@ export default defineComponent({
   extends: WWTAwareComponent,
 
   props: {
-    kcs: { type: KeyboardControlSettings, default: new KeyboardControlSettings({}) }
+    kcs: {
+      type: KeyboardControlSettings,
+      default: new KeyboardControlSettings({}),
+      required: false,
+    }
   },
 
   data() {

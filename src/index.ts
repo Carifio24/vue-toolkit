@@ -7,6 +7,7 @@ import { usePlaybackControl } from "./composables/playbackControl";
 import { useWindowShape, WindowShape } from "./composables/windowShape";
 import { useWWTKeyboardControls } from "./composables/wwtKeyboard";
 
+import VueDSBase from "./components/VueDSBase";
 import CreditLogos from "./components/CreditLogos.vue";
 import DateTimePicker from "./components/DateTimePicker.vue";
 import FundingAcknowledgement from "./components/FundingAcknowledgement.vue";
@@ -35,6 +36,8 @@ export {
   usePlaybackControl,
   useWindowShape,
   useWWTKeyboardControls,
+  
+  VueDSBase,
 
   CreditLogos,
   DateTimePicker,
