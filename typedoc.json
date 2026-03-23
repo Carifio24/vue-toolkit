@@ -2,5 +2,16 @@
     "$schema": "https://typedoc.org/schema.json",
     "entryPoints": ["./src/index.ts"],
     "out": "docs",
-    "exclude": ["**/*.vue", "src/shims-vue.d.ts", "src/stories/**"]
+    "externalPattern": "**/node_modules/**",
+    "excludeExternals": true,
+    "compilerOptions": {
+        "skipLibCheck": true
+    },
+    "exclude": [
+        "**/*.vue",
+        "src/shims-vue.d.ts",
+        "src/components/**",
+        "node_modules/**",
+        "src/stories/**"
+    ]
 }
