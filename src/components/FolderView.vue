@@ -71,7 +71,6 @@ import { VProgressCircular } from "vuetify/components";
 import { Folder, FolderUp } from "@wwtelescope/engine";
 import { Thumbnail } from "@wwtelescope/engine-types";
 import { FolderViewProps, ItemSelectionType } from "../types";
-import { engineStore } from "@wwtelescope/engine-pinia";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -99,7 +98,6 @@ if (!(props.rootFolder || props.rootUrl)) {
   throw new Error("Either one of rootFolder or rootUrl must be specified!");
 }
 
-const store = engineStore();
 const folder = ref<Folder | null>(null);
 let currentFolder: Folder | null = null;
 const loading = ref(false);
@@ -108,9 +106,9 @@ if (props.rootFolder != null) {
   folder.value = props.rootFolder; 
 } else if (props.rootUrl != null) {
   const url = props.rootUrl;
-  store.waitForReady().then(() => {
+  props.store.waitForReady().then(() => {
     loading.value = true;
-    store.loadImageCollection({ url, loadChildFolders: !props.lazy })
+    props.store.loadImageCollection({ url, loadChildFolders: !props.lazy })
       .then(loadedFolder => {
         folder.value = loadedFolder;
         loading.value = false;
@@ -154,7 +152,7 @@ function selectItem(item: Thumbnail, type: ItemSelectionType) {
   if (item instanceof Folder) {
     if (props.lazy) {
       loading.value = true;
-      store.loadImageCollection({
+      props.store.loadImageCollection({
         url: item.get_url(),
         loadChildFolders: !props.lazy,
       }).then(loadedFolder => {

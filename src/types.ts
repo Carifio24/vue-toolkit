@@ -439,6 +439,8 @@ export interface UserExperienceProps {
 }
 
 export interface FolderViewProps {
+  /** The WWT engine store to use for the HUD. Required */
+  store: WWTEngineStore;
   /** The root folder of the tree to display in the view. One of either this or `rootUrl` must be specified */
   rootFolder?: Folder;
   /** A URL for the root folder of the tree to display in the view. One of either this or `rootFolder` must be specified */
