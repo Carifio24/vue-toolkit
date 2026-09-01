@@ -8,7 +8,10 @@ const vueOptions: StorybookConfig["framework"] = {
 }
 
 const config: StorybookConfig = {
-  stories: ["../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+  stories: [
+    "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    "../src/**/*.mdx",
+  ],
   addons: [
     "@storybook/addon-webpack5-compiler-swc",
     "@storybook/addon-links",
@@ -16,6 +19,15 @@ const config: StorybookConfig = {
     "@chromatic-com/storybook",
     "@storybook/addon-interactions",
     "storybook-dark-mode",
+    {
+      name: "@ts2doc/storybook-addon",
+      options: {
+        patternDocType: "src/(composables/)?*.ts",
+        compilerOptions: {
+          skipLibCheck: true,
+        }
+      }
+    }
   ],
   staticDirs: [
     "../src/stories/assets",
