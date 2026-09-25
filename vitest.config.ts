@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import viteConfig from "./vite.config";
+import { setupMaster } from "node:cluster";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -22,7 +23,8 @@ export default defineConfig(env => {
               include: [
                 "src/**/**.test.ts",
               ],
-              environment: "node",
+              environment: "jsdom",
+              setupFiles: ["./unit.setup.ts"],
             },
           },
           {

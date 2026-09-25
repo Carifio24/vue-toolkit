@@ -1,7 +1,3 @@
-/**
- * @vitest-environment jsdom
- */
-
 import { filterInPlace, isWebGLEnabled } from "../utils";
 import { describe, expect, it, test } from "vitest";
 import { mockWebGL } from "./utils";
@@ -42,7 +38,7 @@ describe("Test utilities", () => {
   test.each(WEBGL_VERSIONS)("should correctly determine the available WebGL version", (expectedVersion) => {
     mockWebGL(expectedVersion);
     WEBGL_VERSIONS.forEach(version => {
-      expect(isWebGLEnabled(version)).toBe(version == expectedVersion);
+      expect(isWebGLEnabled(version)).toEqual(version == expectedVersion);
     });
   });
 

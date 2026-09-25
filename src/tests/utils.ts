@@ -7,13 +7,15 @@ const WEBGL_CONTEXTS = {
 };
 
 export function mockWebGL(version: 1 | 2 | "experimental" | null) {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockImplementation(function (this: HTMLCanvasElement, contextID, _options) {
     if (version && WEBGL_CONTEXTS[version] == contextID) {
       return {
         canvas: this,
         clearColor: vi.fn(),
         clear: vi.fn(),
-      } as unknown as RenderingContext;
+      } as unknown;
     };
     return null;
   });
