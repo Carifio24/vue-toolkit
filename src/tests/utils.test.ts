@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import { filterInPlace, isWebGLEnabled } from "@/utils";
+import { filterInPlace, isWebGLEnabled } from "../utils";
 import { describe, expect, it, test } from "vitest";
 import { mockWebGL } from "./utils";
 
