@@ -24,7 +24,7 @@
           >
             <FontAwesomeIcon
               :color="accentColor"
-              :icon="gripIcon"
+              icon="fa-grip-vertical"
             />
           </slot>
         </div>
@@ -69,7 +69,6 @@ const props = withDefaults(defineProps<DraggableItemsProps<T>>(), {
   handleClass: null,
   containerClass: null,
   rowClass: null,
-  gripIcon: "fa-grip-vertical",
   accentColor: "black",
 });
 
