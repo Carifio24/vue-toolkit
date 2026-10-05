@@ -15,6 +15,7 @@ import { useWWTKeyboardControls } from "./composables/wwtKeyboard";
 import AttentionHook from "./components/AttentionHook.vue";
 import CreditLogos from "./components/CreditLogos.vue";
 import DateTimePicker from "./components/DateTimePicker.vue";
+import DraggableItems from "./components/DraggableItems.vue";
 import FolderView from "./components/FolderView.vue";
 import FundingAcknowledgement from "./components/FundingAcknowledgement.vue";
 import Gallery from "./components/Gallery.vue";
@@ -53,6 +54,7 @@ export {
   AttentionHook,
   CreditLogos,
   DateTimePicker,
+  DraggableItems,
   FolderView,
   FundingAcknowledgement,
   Gallery,
