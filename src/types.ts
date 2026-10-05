@@ -50,6 +50,15 @@ export interface CreditLogosProps {
   defaultLogos: DefaultCreditLogo[];
 }
 
+export interface DraggableItemsProps<T> {
+  name: (T) => string;
+  key: (T) => string;
+  handleClass?: string | null;
+  containerClass?: string | null;
+  rowClass?: string | null;
+  gripIcon?: string;
+}
+
 /* Gallery */
 
 /** Interface describing props for the gallery component */
