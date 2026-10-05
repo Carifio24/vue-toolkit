@@ -212,6 +212,7 @@ __metadata:
     vue-shepherd: "npm:^6.0.0"
     vue-template-compiler: "npm:^2.7.14"
     vue-tsc: "npm:^3.3.11"
+    vuedraggable: "npm:^2.24.3"
     vuetify: "npm:^3.3.3"
   peerDependencies:
     "@floating-ui/dom": "*"
@@ -5916,6 +5917,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sortablejs@npm:1.10.2":
+  version: 1.10.2
+  resolution: "sortablejs@npm:1.10.2"
+  checksum: 10/9bffed8c94980db6e3f4630d0a97a2c97a37e6e8950f787a234848242c4eca73b222b4537464ba2cd8524b61a9300ebab1af70c93dee75c9c25ff483bf644220
+  languageName: node
+  linkType: hard
+
 "source-map-js@npm:^1.2.1":
   version: 1.2.1
   resolution: "source-map-js@npm:1.2.1"
@@ -6468,14 +6476,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:^8.10.2":
-  version: 8.11.2
-  resolution: "undici@npm:8.11.2"
-  checksum: 10/a6d851b0a41a94ee11d351457a818f86094ab009af59d82c1e3c38a89cfbb3910f9dbccdef442b156b9d500490f05e9ef9acf312f1a4690a41fac4941a440b8e
-  languageName: node
-  linkType: hard
-
-"undici@npm:^8.4.1":
+"undici@npm:^8.10.2, undici@npm:^8.4.1":
   version: 8.11.2
   resolution: "undici@npm:8.11.2"
   checksum: 10/a6d851b0a41a94ee11d351457a818f86094ab009af59d82c1e3c38a89cfbb3910f9dbccdef442b156b9d500490f05e9ef9acf312f1a4690a41fac4941a440b8e
@@ -6944,6 +6945,15 @@ __metadata:
     typescript:
       optional: true
   checksum: 10/b6fa07e1535493861aec2ad18f5630d40608f6b94f9616708f5d2a6424f0d54402fc71880ddd413e81478f1c1aa304a18b81b2d7a4c90262ec56214cc8749b72
+  languageName: node
+  linkType: hard
+
+"vuedraggable@npm:^2.24.3":
+  version: 2.24.3
+  resolution: "vuedraggable@npm:2.24.3"
+  dependencies:
+    sortablejs: "npm:1.10.2"
+  checksum: 10/b7497e66eb0dce7a552e49b482884f14d158b7f5a91ef2c4f77f69dc830f42565beaa8bc45019b088ef1aa62d7dc16994d4f7595b0aabcdb3d83580f789dd545
   languageName: node
   linkType: hard
 
