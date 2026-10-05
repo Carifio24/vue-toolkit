@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
+import { ref } from "vue";
 import { Meta, StoryObj } from "@storybook/vue3-vite";
 import { DraggableItems } from "..";
 
 import "./stories.css";
+import "./draggable-items.css";
 
 const meta: Meta<typeof DraggableItems> = {
   component: DraggableItems,
@@ -21,22 +23,23 @@ interface DraggableItem {
 
 export const Primary: Story = {
   render: (args: unknown) => {
-    const items: DraggableItem[] = [
+    const items = ref<DraggableItem[]>([
       { name: "Item 1", info: "This was originally the first item" },
       { name: "Item 2", info: "This was originally the second item" },
       { name: "Item 3", info: "This was originally the third item" },
-    ];
-    const key = (item: DraggableItem) => item.name;
+    ]);
+    const name = (item: DraggableItem) => item.name;
     return {
       components: { DraggableItems },
       template: `
         <DraggableItems
           v-bind="args"
-          :key="key"
-          :items="items"
+          v-model="items"
+          :itemName="name"
+          :itemKey="name"
         >
           <template #item="{ item }">
-            <div>
+            <div class="draggable-item">
               <h3>{{ item.name }}</h3>
               <p>{{ item.info }}</p>
             </div>
@@ -44,9 +47,12 @@ export const Primary: Story = {
         </DraggableItems>
       `,
       setup() {
-        return { args, items, key };
+        return { args, items, name };
       },
     };
   },
-  args: { },
+  args: {
+    rowClass: ".item-row",
+    accentColor: "dodgerblue",
+  },
 };

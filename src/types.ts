@@ -51,12 +51,13 @@ export interface CreditLogosProps {
 }
 
 export interface DraggableItemsProps<T> {
-  name: (item: T) => string;
-  key: (item: T) => string;
+  itemName: (item: T) => string;
+  itemKey: (item: T) => string;
   handleClass?: string | null;
   containerClass?: string | null;
   rowClass?: string | null;
   gripIcon?: string;
+  accentColor?: string;
 }
 
 /* Gallery */

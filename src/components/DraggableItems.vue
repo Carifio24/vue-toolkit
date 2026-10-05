@@ -3,7 +3,8 @@
     v-model="items"
     :class="['draggable-container', containerClass ?? '']"
     :handle="handleClass"
-    :item-key="(item: T) => key(item)"
+    :item-key="(item: T) => itemKey(item)"
+    :style="cssVars"
   >
     <template #item="{ element }">
       <div
@@ -14,15 +15,22 @@
           role="button"
           tabindex="0"
           :data-layer-grip="element"
-          :aria-label="`Reorder ${name(element)}`"
+          :aria-label="`Reorder ${itemName(element)}`"
           @keydown="onGripKeydown($event, element)"
         >
           <slot
             name="handle"
             :item="element"
           >
-            <FontAwesomeIcon :icon="gripIcon" />
+            <FontAwesomeIcon
+              :color="accentColor"
+              :icon="gripIcon"
+            />
           </slot>
+        </div>
+        <div
+          class="draggable-item-wrapper"
+        >
           <slot
             name="item"
             :item="element"
@@ -35,7 +43,7 @@
 </template>
 
 <script setup lang="ts" generic="T">
-import { nextTick } from "vue";
+import { computed, nextTick } from "vue";
 import draggable from "vuedraggable";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -52,12 +60,22 @@ const emit = defineEmits<{
   (event: "change", order: T[]): void;
 }>();
 
+defineSlots<{
+  handle(props: { item: T }): any;
+  item(props: { item: T }): any;
+}>();
+
 const props = withDefaults(defineProps<DraggableItemsProps<T>>(), {
   handleClass: null,
   containerClass: null,
   rowClass: null,
   gripIcon: "fa-grip-vertical",
+  accentColor: "black",
 });
+
+const cssVars = computed(() => ({
+  "--accent-color": props.accentColor,
+}));
 
 // Reordering by keyboard. Up/Down move the focused layer one place in the list,
 // the same thing dragging its grip does, and go through the same displayOrder
@@ -94,23 +112,6 @@ function onGripKeydown(event: KeyboardEvent, item: T) {
 </script>
 
 <style scoped lang="less">
-ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  margin-left: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  height: fit-content;
-}
-
-li {
-  padding: 8px 12px;
-  border-bottom: 1px solid #eee;
-  cursor: move;
-  margin: 10px 0;
-}
-
 .drag-handle {
   /* A Font Awesome icon takes its size from font-size, and at the 20pt this
      used to carry, the grip drew 23x27 -- much bigger than the mdi-menu it
@@ -141,12 +142,17 @@ li {
 }
 
 .draggable-row {
-  background: #404040;
-  border: 1px solid white;
+  border: 1px solid var(--accent-color);
   border-radius: 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 5px;
+}
+
+.draggable-item-wrapper {
+  margin: 0;
+  padding: 0;
+  border-left: 1px solid var(--accent-color);
 }
 </style>
