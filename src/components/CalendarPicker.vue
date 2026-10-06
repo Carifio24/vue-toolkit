@@ -1,15 +1,17 @@
 <template>
   <VueDatePicker
-    v-bind="props"
+    :style="cssVars"
+    v-bind="{ ...$attrs, ...props }"
     class="mx-2 cds__date-picker"
     ref="calendar"
+    :formats="{input: formatDateDisplay, preview: formatDateDisplay}"
     @open="keyboardHandlers.onOpen"
     @closed="keyboardHandlers.onClosed"
     @update-month-year="keyboardHandlers.onMonthChange"
   >
     <template #action-buttons>
       <button
-        class="dp__action_button dp__action-cancel"
+        class="dp--action-button dp--action-cancel"
         type="button"
         @click="() => {
           emit('cancel');
@@ -19,11 +21,9 @@
         Cancel
       </button>
       <button
-        class="dp__action_button dp__action-latest"
+        class="dp--action-button dp--action-latest"
         @click="onLatestClicked"
         :disabled="!allowedDates"
-        elevation="0"
-        size="sm"
       >
         Latest
       </button>
@@ -32,16 +32,17 @@
 </template>
 
 <script setup lang="ts">
-import { VueDatePicker, type RootProps } from '@vuepic/vue-datepicker';
-import { createCalendarPickerKeyboardHandlers } from "../date_picker_keyboard";
-import { useTemplateRef } from 'vue';
+import { VueDatePicker } from "@vuepic/vue-datepicker";
+import '@vuepic/vue-datepicker/dist/main.css';
+import { createCalendarPickerKeyboardHandlers } from "../calendar_picker_keyboard";
+import { calendarPickerPassthroughDefaults, type CalendarPickerProps } from "../types";
+import { computed, useTemplateRef } from "vue";
 
 const calendar = useTemplateRef("calendar");
-const keyboardHandlers = createCalendarPickerKeyboardHandlers(calendar.value);
-
-interface CalendarPickerProps extends RootProps {};
+const keyboardHandlers = createCalendarPickerKeyboardHandlers(calendar);
 
 const props = withDefaults(defineProps<CalendarPickerProps>(), {
+  ...calendarPickerPassthroughDefaults,
   weekStart: 0,
   sixWeeks: true,
   timeConfig: () => ({ enableTimePicker: false }),
@@ -50,38 +51,57 @@ const props = withDefaults(defineProps<CalendarPickerProps>(), {
   inputAttrs: () => ({ clearable: false }),
 });
 
+defineOptions({ inheritAttrs: false });
+
 const emit = defineEmits<{
   (event: "cancel"): void;
   (event: "latest", date: Date | null): void;
 }>();
 
+const cssVars = computed(() => ({
+  "--dp-border-color": props.dark ? "rgba(255, 255, 255, 0.7)" : "rgb(var(--v-theme-surface-variant), 0.9)",
+  "--dp-border-color-active": props.dark ? "white" : "black",
+}));
+
 function onLatestClicked() {
-  const date = props.allowedDates ? new Date(props.allowedDates[props.allowedDates.length - 1]) : null;
+  const dates = props.allowedDates;
+  const date = dates ? new Date(dates[dates.length - 1]) : null;
   emit("latest", date);
   keyboardHandlers.closeAfterSelection();
+}
+
+function formatDateDisplay(date: Date | null): string {  
+  return date?.toLocaleDateString() || '';
 }
 </script>
 
 <style scoped>
-button.dp__action-latest {
+button.dp--action-latest {
   color: white;
   background: var(--dp-primary-color);
 }
 
-button.dp__action-latest[disabled] {
+button.dp--action-latest[disabled] {
   background: var(--dp-disabled-color);
   color: #ccc;
   
 }
 
 .cds__date-picker {
-  --dp-border-color: rgba(255, 255,255, 0.7);
-  --dp-border-color-hover: white;
- --dp-border-color-focus: white;
+  --dp-border-color: var(--dp-border-color);
+  --dp-border-color-hover: var(--dp-border-color-active);
+  --dp-border-color-focus: var(--dp-border-color-active);
 }
+</style>
 
-
-.dp__menu {
+<!-- This has to be unscoped, since we teleport the calendar component -->
+<style lang="less">
+.dp--menu {
   border: 1px solid rgb(var(--v-theme-surface-variant), 0.9);
+
+  .dp--arrow-top,
+  .dp--arrow-bottom {
+    border-color: rgb(var(--v-theme-surface-variant));
+  }
 }
 </style>

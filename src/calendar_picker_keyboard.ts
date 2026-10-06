@@ -1,5 +1,4 @@
 import { nextTick, type Ref } from "vue";
-import type { VueDatePicker } from "@vuepic/vue-datepicker";
 
 /**
  * Keyboard handling shared by every @vuepic/vue-datepicker in the app.
@@ -62,7 +61,7 @@ function firstPickableCell(menu: HTMLElement | null | undefined): HTMLElement | 
   return items.length > 0 ? items[0] : null;
 }
 
-export function createCalendarPickerKeyboardHandlers(calendar: DatePickerInstance | null) {
+export function createCalendarPickerKeyboardHandlers(calendar: Ref<DatePickerInstance | null>) {
 
   // The element the calendar was opened from, so closing it can hand focus
   // back. It is captured on open rather than looked up on close because every
@@ -170,7 +169,7 @@ export function createCalendarPickerKeyboardHandlers(calendar: DatePickerInstanc
    */
   function closeAfterSelection() {
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => calendar?.closeMenu());
+      requestAnimationFrame(() => calendar.value?.closeMenu());
     });
   }
 
