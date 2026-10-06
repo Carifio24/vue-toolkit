@@ -55,6 +55,7 @@ export const Primary: Story = {
     handleClass: ".drag-example-handle",
     containerClass: ".drag-example-container",
     rowClass: ".item-row",
+    contentClass: ".item-content",
     accentColor: "dodgerblue",
   },
 };

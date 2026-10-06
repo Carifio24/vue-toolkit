@@ -59,8 +59,10 @@ export interface DraggableItemsProps<T> {
   handleClass?: string | null;
   /** A class (or space-separated set of classes) to add to the overall drag container */
   containerClass?: string | null;
-  /** A class (or space-separated set of classes) to add to main content container of each row */
+  /** A class (or space-separated set of classes) to add to the main container of each row */
   rowClass?: string | null;
+  /** A class (or space-separated set of classes) to add to the content container of each row */
+  contentClass?: string | null;
   /** The accent color, used for the border and drag handle of each row. Should be a valid CSS color */
   accentColor?: string;
 }

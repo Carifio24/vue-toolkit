@@ -29,7 +29,7 @@
           </slot>
         </div>
         <div
-          class="draggable-item-wrapper"
+          :class="['draggable-item-wrapper', contentClass ?? '']"
         >
           <slot
             name="item"
@@ -68,6 +68,7 @@ defineSlots<{
 const props = withDefaults(defineProps<DraggableItemsProps<T>>(), {
   handleClass: null,
   containerClass: null,
+  contentClass: null,
   rowClass: null,
   accentColor: "black",
 });
