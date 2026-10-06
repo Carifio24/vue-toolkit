@@ -2,7 +2,7 @@
   <draggable
     v-model="items"
     :class="['draggable-container', containerClass ?? '']"
-    :handle="handleClass"
+    handle=".drag-handle"
     :item-key="(item: T) => itemKey(item)"
     :style="cssVars"
   >
