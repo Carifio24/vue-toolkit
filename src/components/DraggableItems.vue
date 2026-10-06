@@ -34,8 +34,7 @@
           <slot
             name="item"
             :item="element"
-          >
-          </slot>
+          />
         </div>
       </div>
     </template>
@@ -43,7 +42,7 @@
 </template>
 
 <script setup lang="ts" generic="T">
-import { computed, nextTick } from "vue";
+import { computed, nextTick, type VNode } from "vue";
 import draggable from "vuedraggable";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -61,8 +60,8 @@ const emit = defineEmits<{
 }>();
 
 defineSlots<{
-  handle?(props: { item: T }): any;
-  item(props: { item: T }): any;
+  handle?(props: { item: T }): VNode[];
+  item(props: { item: T }): VNode[];
 }>();
 
 const props = withDefaults(defineProps<DraggableItemsProps<T>>(), {
