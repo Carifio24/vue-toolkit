@@ -14,7 +14,7 @@
           :class="['drag-handle', handleClass ?? '']"
           role="button"
           tabindex="0"
-          :data-layer-grip="element"
+          :data-layer-grip="itemKey(element)"
           :aria-label="`Reorder ${itemName(element)}`"
           @keydown="onGripKeydown($event, element)"
         >
@@ -94,8 +94,9 @@ function moveLayer(item: T, delta: number) {
   order.splice(to, 0, ...order.splice(from, 1));
   items.value = order;
   emit("change", items.value);
+  console.log(props.itemKey(item));
   nextTick(() => {
-    document.querySelector<HTMLElement>(`[data-layer-grip="${item}"]`)?.focus();
+    document.querySelector<HTMLElement>(`[data-layer-grip="${props.itemKey(item)}"]`)?.focus();
   });
 }
 
