@@ -61,7 +61,7 @@ const emit = defineEmits<{
 }>();
 
 defineSlots<{
-  handle(props: { item: T }): any;
+  handle?(props: { item: T }): any;
   item(props: { item: T }): any;
 }>();
 
