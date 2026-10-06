@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import { ref } from "vue";
+import { ref, type Component } from "vue";
 import { Meta, StoryObj } from "@storybook/vue3-vite";
 import { DraggableItems } from "..";
 
@@ -8,6 +8,8 @@ import "./stories.css";
 import "./draggable-items.css";
 
 const meta: Meta<typeof DraggableItems> = {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore Work around issue with generic component
   component: DraggableItems,
   tags: ["autodocs"],
   title: "Vue Toolkit/Components/Draggable Items",
@@ -30,7 +32,7 @@ export const Primary: Story = {
     ]);
     const name = (item: DraggableItem) => item.name;
     return {
-      components: { DraggableItems },
+      components: { DraggableItems: DraggableItems as Component },
       template: `
         <DraggableItems
           v-bind="args"
