@@ -52,10 +52,10 @@ export const Primary: Story = {
     };
   },
   args: {
-    handleClass: ".drag-example-handle",
-    containerClass: ".drag-example-container",
-    rowClass: ".item-row",
-    contentClass: ".item-content",
+    handleClass: "drag-example-handle",
+    containerClass: "drag-example-container",
+    rowClass: "item-row",
+    contentClass: "item-content",
     accentColor: "dodgerblue",
   },
 };
