@@ -37,7 +37,7 @@ import { VueDatePicker } from "@vuepic/vue-datepicker";
 import '@vuepic/vue-datepicker/dist/main.css';
 import { createCalendarPickerKeyboardHandlers } from "../calendar_picker_keyboard";
 import { calendarPickerPassthroughDefaults, type CalendarPickerProps } from "../types";
-import { computed, useTemplateRef, watch, onMounted } from "vue";
+import { computed, useTemplateRef } from "vue";
 
 const calendar = useTemplateRef("calendar");
 const keyboardHandlers = createCalendarPickerKeyboardHandlers(calendar);
