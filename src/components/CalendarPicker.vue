@@ -8,6 +8,7 @@
     @open="keyboardHandlers.onOpen"
     @closed="keyboardHandlers.onClosed"
     @update-month-year="keyboardHandlers.onMonthChange"
+    :ui="{ menu: `cds__date-picker-menu cds__date-picker-menu-${dark ? 'dark' : 'light'}` }"
   >
     <template #action-buttons>
       <button
@@ -58,22 +59,13 @@ const emit = defineEmits<{
   (event: "latest", date: Date | null): void;
 }>();
 
-const borderColor = computed(() => {
+const cssVars = computed(() => {
   const c = props.dark ? 224 : 66;
-  return `rgba(${c}, ${c}, ${c}, 1)`;
+  return {
+    "--dp-border-color": `rgba(${c}, ${c}, ${c}, 1)`,
+    "--dp-border-color-active": props.dark ? "white" : "black",
+  };
 });
-
-const cssVars = computed(() => ({
-  "--dp-border-color": borderColor.value,
-  "--dp-border-color-active": props.dark ? "white" : "black",
-}));
-
-onMounted(() => {
-  console.log(calendar.value);
-  // calendar.value?.style.setProperty("--dp-border-color", borderColor.value);
-});
-
-watch(borderColor, (color: string) => document.body.style.setProperty("--dp-border-color", color));
 
 function onLatestClicked() {
   const dates = props.allowedDates;
@@ -107,12 +99,26 @@ button.dp--action-latest[disabled] {
 
 <!-- This has to be unscoped, since we teleport the calendar component by default -->
 <style lang="less">
-.dp--menu {
-  border: 1px solid rgb(var(--dp-border-color), 0.9);
+.cds__date-picker-menu {
+  border-width: 1px;
+  border-style: solid;
+}
+
+.cds__date-picker-menu-light {
+  border-color: rgba(66, 66, 66, 1);
 
   .dp--arrow-top,
   .dp--arrow-bottom {
-    border-color: rgb(var(--dp-border-color));
+    border-color: rgba(66, 66, 66, 1);
+  }
+}
+
+.cds__date-picker-menu-dark {
+  border-color: rgba(224, 224, 224, 1);
+
+  .dp--arrow-top,
+  .dp--arrow-bottom {
+    border-color: rgba(224, 224, 224, 1);
   }
 }
 </style>
