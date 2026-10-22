@@ -1,1 +1,0 @@
-import"./react-C21x__mS.js";import{Dt as e,It as t}from"./DocsRenderer-JROSPFPF-6pXhWo8J.js";e();export{t as color};
