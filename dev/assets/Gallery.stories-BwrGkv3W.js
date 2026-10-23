@@ -1,4 +1,4 @@
-import{n as e}from"./rolldown-runtime-BCiCTKAo.js";import{Z as t}from"./iframe-CK8rqQ-z.js";import{C as n,t as r}from"./src-C3D7y5UK.js";var i,a,o,s;function c(){return(c=e((()=>{r(),i=t(),a={component:n,tags:[`autodocs`],title:`Vue Toolkit/Components/Gallery`},o={render:e=>{let t=(0,i.engineStore)();return{components:{Gallery:n,WWTComponent:i.WWTComponent},template:`
+import{n as e}from"./rolldown-runtime-BCiCTKAo.js";import{Z as t}from"./iframe-V8DBcn0l.js";import{C as n,t as r}from"./src-njDpc2tG.js";var i,a,o,s;function c(){return(c=e((()=>{r(),i=t(),a={component:n,tags:[`autodocs`],title:`Vue Toolkit/Components/Gallery`},o={render:e=>{let t=(0,i.engineStore)();return{components:{Gallery:n,WWTComponent:i.WWTComponent},template:`
         <div>
           <WWTComponent
             wwtNamespace="storybook"
