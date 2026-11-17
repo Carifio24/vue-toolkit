@@ -3,7 +3,7 @@
     id="funding-acknowledgment"
     :style="cssVars"
   >
-    The material contained in this product is based upon work supported by NASA under cooperative agreement award No. 80NSSC21M0002. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of the National Aeronautics and Space Administration.
+  The material contained in this product is based upon work supported by {{ supporterShort }} under cooperative agreement award {{ awardFormat(award) }}. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of the {{ supporter }}.
   </div>
 </template>
 
@@ -15,6 +15,10 @@ import { FundingAcknowledgementProps } from "../types";
 const props = withDefaults(defineProps<FundingAcknowledgementProps>(), {
   color: "#E0E0E0",
   backgroundColor: "#0C3D91",
+  award: "80NSSC26M0138",
+  supporter: "National Aeronautics and Space Administration",
+  supporterShort: "NASA",
+  awardFormat: ((award: string) => `No. ${award}`),
 });
 
 const cssVars = computed(() => {
