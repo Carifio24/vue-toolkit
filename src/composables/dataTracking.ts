@@ -6,6 +6,7 @@ export interface DataTrackingOptions {
   userIDKey: string;
   apiUrl?: string;  // Allow setting this for e.g. testing with a local server
   storyPath: string;
+  apiKey: string;
   resetData: () => void;
   getData: () => Record<string, unknown>;
   updateIntervalMs?: number;
@@ -25,16 +26,6 @@ export function useDataTracking(options: DataTrackingOptions) {
   const storedOptOut = window.localStorage.getItem(options.optOutKey);
   const responseOptOut = ref(typeof storedOptOut === "string" ? storedOptOut === "true" : null);
 
-  // We don't want ts-expect-error in the following lines
-  // because this may or may not be an error
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const vite = import.meta && import.meta.env;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const env = vite ? import.meta.env : process.env;
-  const prefix = vite ? "VITE_" : "VUE_APP_";
-
   const maybeUserID = window.localStorage.getItem(options.userIDKey);
   const existingUser = maybeUserID !== null;
   const userID = maybeUserID ?? v4();
@@ -45,7 +36,7 @@ export function useDataTracking(options: DataTrackingOptions) {
   const headers = {
     "Content-Type": "application/json",
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    "Authorization": env[`${prefix}CDS_API_KEY`] ?? "",
+    "Authorization": options.apiKey,
   };
 
   watch(responseOptOut, (optOut: boolean | null) => {
