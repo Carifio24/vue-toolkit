@@ -23,5 +23,9 @@ export const Primary: Story = {
   args: {
     color: "#E0E0E0",
     backgroundColor: "#0C3D91",
+    award: "80NSSC26M0138",
+    supporter: "National Aeronautics and Space Administration",
+    supporterShort: "NASA",
+    awardFormat: ((award: string) => `No. ${award}`),
   }
 };
