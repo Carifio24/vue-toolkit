@@ -12,7 +12,7 @@ export interface CreateTrackingTimerOptions {
  */
 export function createTrackingTimer(options: CreateTrackingTimerOptions) {
 
-  let startTimestamp: number | null = null;
+  let startTimestamp: number | null = options.active.value ? Date.now() : null;
   let storedTimeMs = 0;
 
   watch(options.active, (active: boolean) => {
