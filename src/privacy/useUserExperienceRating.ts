@@ -22,11 +22,11 @@ export interface UseUserExperienceRatingOptions {
 
 export function useUserExperienceRating(options: UseUserExperienceRatingOptions) {
 
-  const responseOptOut = options?.responseOptOut ?? ref(null);
+  const responseOptOut = options.responseOptOut ?? ref(null);
 
-  const storagePrefix = options?.storagePrefix ?? options.storyPrefix;
+  const storagePrefix = options.storagePrefix ?? options.storyPrefix;
   const ratingOptOutKey = `${storagePrefix}-rating-optout` as const;
-  const storyRatingUrl = (options?.mixin === false) 
+  const storyRatingUrl = (options.mixin === false) 
     ? `${API_BASE_URL}/stories/user-experience/${options.storyPrefix}`
     : `${API_BASE_URL}/${options.storyPrefix}/user-experience`;
 
@@ -39,13 +39,13 @@ export function useUserExperienceRating(options: UseUserExperienceRatingOptions)
   const showRatingPrivacyPolicy = ref(false);
 
   function debugLog(...args: unknown[]) {
-    if (options?.debug) {
+    if (options.debug) {
       console.debug("[useUserExperienceRating]", ...args);
     }
   }
 
   function randomQuestion() {
-    const questions = options?.questions ?? [
+    const questions = options.questions ?? [
       "Does this spark your curiosity?",
       "Are you learning something new?",
     ];
@@ -93,7 +93,7 @@ export function useUserExperienceRating(options: UseUserExperienceRatingOptions)
       clearRatingTimeout();
       ratingTimeout.value = setTimeout(() => {
         showRating.value = true;
-      }, options?.timeout ?? 90_000); // default to 90 seconds
+      }, options.timeout ?? 90_000); // default to 90 seconds
     }
   }
 
