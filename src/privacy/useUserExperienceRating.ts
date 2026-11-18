@@ -8,6 +8,9 @@ import {
 
 
 export interface UseUserExperienceRatingOptions {
+  storyPrefix: string;
+  uuid: MaybeRef<string>;
+  apiKey: string;
   responseOptOut?: Ref<boolean | null>;
   timeout?: number;
   questions?: string[];
@@ -17,15 +20,15 @@ export interface UseUserExperienceRatingOptions {
   mixin?: boolean;
 }
 
-export function useUserExperienceRating(storyPrefix: string, uuid: MaybeRef<string>, options?: UseUserExperienceRatingOptions) {
+export function useUserExperienceRating(options: UseUserExperienceRatingOptions) {
 
   const responseOptOut = options?.responseOptOut ?? ref(null);
 
-  const storagePrefix = options?.storagePrefix ?? storyPrefix;
+  const storagePrefix = options?.storagePrefix ?? options.storyPrefix;
   const ratingOptOutKey = `${storagePrefix}-rating-optout` as const;
   const storyRatingUrl = (options?.mixin === false) 
-    ? `${API_BASE_URL}/stories/user-experience/${storyPrefix}` 
-    : `${API_BASE_URL}/${storyPrefix}/user-experience`;
+    ? `${API_BASE_URL}/stories/user-experience/${options.storyPrefix}`
+    : `${API_BASE_URL}/${options.storyPrefix}/user-experience`;
 
   const storedRatingOptOut = window.localStorage.getItem(ratingOptOutKey);
   const parsedRatingOptOut = typeof storedRatingOptOut === "string" ? storedRatingOptOut === "true" : null;
@@ -62,11 +65,11 @@ export function useUserExperienceRating(storyPrefix: string, uuid: MaybeRef<stri
   }
 
   async function checkForExistingRating() {
-    const response = await fetch(`${storyRatingUrl}/${toValue(uuid)}`, {
+    const response = await fetch(`${storyRatingUrl}/${toValue(options.uuid)}`, {
       method: "GET",
       headers: {
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        Authorization: import.meta.env.VITE_CDS_API_KEY ?? "",
+        Authorization: options.apiKey,
       },
     });
 
@@ -109,8 +112,8 @@ export function useUserExperienceRating(storyPrefix: string, uuid: MaybeRef<stri
   async function updateUserExperienceInfo(rating: UserExperienceRating | null, comments: string | null) {
     const info: UserExperienceSubmissionInfo = {
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      story_name: storyPrefix,
-      uuid: toValue(uuid),
+      story_name: options.storyPrefix,
+      uuid: toValue(options.uuid),
       question: question.value,
     };
     if (rating) {
@@ -120,7 +123,7 @@ export function useUserExperienceRating(storyPrefix: string, uuid: MaybeRef<stri
       info.comments = comments;
     }
     debugLog("Submitting user experience rating with info:", info);
-    return submitUserExperienceRating(info, import.meta.env.VITE_CDS_API_KEY ?? "", storyRatingUrl)
+    return submitUserExperienceRating(info, options.apiKey, storyRatingUrl)
       .then((response) => {
         if (!response || !response.ok) {
           throw new Error(`Failed to submit rating: ${response?.statusText ?? "No response"}`);
